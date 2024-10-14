@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.crypto import get_random_string
+from slugify import slugify
 
 # Create your models here.
 class Note(models.Model):
@@ -11,10 +13,15 @@ class Note(models.Model):
 
     title = models.CharField(max_length=100)
     body = models.TextField()
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     category = models.CharField(max_length=15, choices=CATEGORY, default='PERSONAL')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    
+    def __str__(self):
+        return self.title
+
 
     def save(self, *args, **kwargs):
         if not self.slug:
