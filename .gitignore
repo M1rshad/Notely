@@ -1,0 +1,71 @@
+# Django #
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# If you're using the standard Django settings module:
+*.secret
+
+# Ignore the virtual environment folder (if located inside the project directory)
+env/
+venv/
+
+# Ignore media files (you may want to track these in a separate storage service)
+media/
+
+# Ignore static files (they're generated via collectstatic)
+staticfiles/
+
+# Ignore local development settings
+/local_settings.py
+
+# Python #
+*.py[cod]
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# MyPy
+.mypy_cache/
+
+# PyCharm #
+.idea/
+
+# VS Code #
+.vscode/
+
+# macOS #
+.DS_Store
+
+# Windows #
+Thumbs.db
