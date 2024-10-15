@@ -1,6 +1,7 @@
 import React from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaSquarePlus } from 'react-icons/fa6'
+import { Link } from 'react-router-dom';
 
 function NavBar() {
   return (
@@ -27,7 +28,7 @@ function NavBar() {
           </div>
         </div>
 
-        <a href="/add-note"  style={{ textDecoration: "none" }}>
+        <Link to="/add-note"  style={{ textDecoration: "none" }}>
         <button
             className="btn btn-outline-primary btn-md"
             type="button"
@@ -35,7 +36,7 @@ function NavBar() {
           >
             <FaSquarePlus className="me-2 fs-6" /> Add Notes
           </button>
-        </a>
+        </Link>
       </div>
     </nav>
     </div>
