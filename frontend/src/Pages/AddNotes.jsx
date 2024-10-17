@@ -9,12 +9,14 @@ function AddNotes({addNote}) {
     const [category, setCategory] = useState("");
     
     const navigate = useNavigate()
-    
+
     const newNote = {
       title: title,
       body: body,
       category: category
     }
+
+    
     
     const handleSubmit = (e) => {
       e.preventDefault()
@@ -22,8 +24,8 @@ function AddNotes({addNote}) {
         return;
       }
       addNote(newNote)
+      
       navigate("/")
-      console.log(newNote)
     }
   return (
     <form onSubmit={handleSubmit}>

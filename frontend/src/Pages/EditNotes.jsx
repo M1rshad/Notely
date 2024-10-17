@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./AddNotes.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
-function EditNotes({addNote}) {
+function EditNotes({updateNote}) {
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [category, setCategory] = useState("");
     
     const navigate = useNavigate()
     
-    const newNote = {
+    const updatedNote = {
       title: title,
       body: body,
       category: category
@@ -20,10 +21,25 @@ function EditNotes({addNote}) {
       if(!title && !body && !category){
         return;
       }
-      addNote(newNote)
-      navigate("/")
-      console.log(newNote)
+      updateNote(updatedNote, slug)
+      navigate(`/notes/${slug}`)
     }
+
+    const {slug}  = useParams()
+    const baseURL = 'http://127.0.0.1:8000/'
+
+    useEffect(()=>{
+      axios.get(`${baseURL}notes/${slug}`).then(res=>
+        {console.log(res.data) 
+          setTitle(res.data.title)
+          setBody(res.data.body)
+          setCategory(res.data.category)
+        }
+      ).catch(
+        err=>console.log(err.message)
+      )
+    },[slug])
+
   return (
     <div>
       <form onSubmit={handleSubmit}>

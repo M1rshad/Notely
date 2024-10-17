@@ -24,13 +24,26 @@ function App() {
     )
   }, [])
 
+  const addNote= (data)=>{
+    axios.post(baseURL+'notes', data).then(res => {
+      console.log(res.data)
+      setNotes([...notes, data])
+    })
+    }
+    const updateNote= (data, slug)=>{
+      axios.put(`${baseURL}/notes/${slug}`, data).then(res => {
+        console.log(res.data)
+       })
+  
+  }
+
   return (
     <div className="App">
       <NavBar/>
       <Routes>
         <Route path='/' element={<Homepage notes ={notes}/>}/>  
-        <Route path='/add-note' element={<AddNotes/>}/>  
-        <Route path='/edit-note' element={<EditNotes/>}/>  
+        <Route path='/add-note' element={<AddNotes addNote={addNote}/>}/>  
+        <Route path='/edit-note/:slug' element={<EditNotes updateNote={updateNote}/>}/>  
         <Route path='/notes/:slug' element={<NoteDetail/>}/>  
       </Routes>
     </div>
