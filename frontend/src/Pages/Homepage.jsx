@@ -2,11 +2,11 @@ import React from 'react'
 import Filter from '../Components/Filter'
 import NoteCardContainer from '../Components/NoteCardContainer'
 
-function Homepage() {
+function Homepage({notes}) {
   return (
     <div>
       <Filter/>
-      <NoteCardContainer/>
+      <NoteCardContainer notes={notes}/>
     </div>
   )
 }
