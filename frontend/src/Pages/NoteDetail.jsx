@@ -4,13 +4,23 @@ import { FiEdit } from 'react-icons/fi'
 import { Link, useParams } from 'react-router-dom'
 import { FormatDate } from '../Components/FormatDate'
 import axios from 'axios'
+import Modal from '../Components/Modal'
 
 function NoteDetail() {
-
+  
   const [note, setNote] = useState({})
   const {slug} = useParams()
   const baseURL = 'http://127.0.0.1:8000/'
+
   
+  const [isOpen, setIsOpen] = useState(false)
+  const handleIsOpen = () =>{
+    setIsOpen(!isOpen)
+  }
+  const deleteNote = (slug) => {
+    axios.delete(`${baseURL}notes/${slug}`).then(res => console.log(res.data))
+  }
+
   useEffect(()=>{
     axios.get(`${baseURL}/notes/${slug}`).then(
       res=>{
@@ -43,20 +53,19 @@ function NoteDetail() {
             </button>
           </Link>
 
-          <button className="btn btn-danger">
+          <button className="btn btn-danger" onClick={handleIsOpen}>
             <BiSolidTrashAlt />
             <span>Delete</span>
           </button>
         </span>
         <p className="description">{note.body}</p>
       </div>
-
-      {/* {isOpen && (
+      {isOpen && (
         <Modal
           handleIsOpen={handleIsOpen}
           deleteNote={() => deleteNote(slug)}
         />
-      )}  */}
+      )} 
     </> 
   )
 }
