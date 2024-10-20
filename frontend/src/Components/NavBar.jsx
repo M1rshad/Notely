@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaSquarePlus } from 'react-icons/fa6'
 import { Link } from 'react-router-dom';
 
-function NavBar() {
+function NavBar({searchText, handleSearchText} ) {
   return (
     <div>
       <nav className="navbar bg-body-tertiary py-50" style={{ padding: "20px" }}>
@@ -19,8 +19,8 @@ function NavBar() {
             <input
               className="form-control"
               placeholder="Search"
-            //   value={searchText}
-            //   onChange={(e) => handelSearchText(e.target.value)}
+              value={searchText}
+              onChange={(e) => handleSearchText(e.target.value)}
             />
             <button className="btn btn-outline-success" type="submit">
               Search

@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Note
 from .serializers import NoteSerializer
+from django.db.models import Q
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
@@ -45,3 +46,11 @@ class NoteDetailView(APIView):
         note = get_object_or_404(Note, slug=slug)
         note.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class SearchView(APIView):
+    def get(self, request):
+        query =  request.query_params.get("search")
+        notes = Note.objects.filter(Q(title__icontains=query)|Q(body__icontains=query)|Q(category__icontains=query))
+        serializer = NoteSerializer(notes, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

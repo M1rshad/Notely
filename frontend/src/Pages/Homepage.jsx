@@ -5,7 +5,7 @@ import NoteCardContainer from '../Components/NoteCardContainer'
 function Homepage({notes, handleFilterText}) {
   return (
     <div>
-      <Filter handleFilterText = {handleFilterText}/>
+      {notes.length > 1 ? <Filter handleFilterText = {handleFilterText}/> : <h4 style={{marginTop : '50px'}}>No notes found</h4> }
       <NoteCardContainer notes={notes}/>
     </div>
   )
