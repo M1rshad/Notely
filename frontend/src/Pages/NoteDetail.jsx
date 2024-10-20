@@ -18,7 +18,8 @@ function NoteDetail() {
     setIsOpen(!isOpen)
   }
   const deleteNote = (slug) => {
-    axios.delete(`${baseURL}notes/${slug}`).then(res => console.log(res.data))
+    axios.delete(`${baseURL}notes/${slug}`).then(res => {
+    })
   }
 
   useEffect(()=>{

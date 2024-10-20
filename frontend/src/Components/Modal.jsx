@@ -1,9 +1,12 @@
+import { useNavigate } from "react-router-dom";
 import "./Modal.css";
 
 const Modal = ({handleIsOpen, deleteNote}) => {
 
+    const navigate = useNavigate()
     const handleDeleteNote = () =>{
-        
+        deleteNote()
+        navigate('/')
     }
     
   return (

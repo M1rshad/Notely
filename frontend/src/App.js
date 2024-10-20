@@ -11,13 +11,25 @@ import axios from 'axios';
 function App() {
 
   const [notes, setNotes] = useState([])
+  const [filterText, setFilterText] = useState(null)
+
+  const handleFilterText = (val) =>{
+    setFilterText(val)
+  }
+
+  const filteredNotes = filterText === 'BUSINESS' ? notes.filter(notes => notes.category === 'BUSINESS') :
+  filterText === 'PERSONAL' ? notes.filter(notes => notes.category === 'PERSONAL') : 
+  filterText === 'IMPORTANT' ? notes.filter(notes => notes.category === 'IMPORTANT') : notes
+
 
   const baseURL = 'http://127.0.0.1:8000/'
 
   useEffect(() =>{
     axios.get(baseURL+'notes').then((response)=>
       {console.log(response.data)
-      setNotes(response.data)}
+      setNotes(response.data)
+
+    }
     
     ).catch(
       (err)=>console.log(err.message)
@@ -41,7 +53,7 @@ function App() {
     <div className="App">
       <NavBar/>
       <Routes>
-        <Route path='/' element={<Homepage notes ={notes}/>}/>  
+        <Route path='/' element={<Homepage notes ={filteredNotes} handleFilterText={handleFilterText}/>}/>  
         <Route path='/add-note' element={<AddNotes addNote={addNote}/>}/>  
         <Route path='/edit-note/:slug' element={<EditNotes updateNote={updateNote}/>}/>  
         <Route path='/notes/:slug' element={<NoteDetail/>}/>  

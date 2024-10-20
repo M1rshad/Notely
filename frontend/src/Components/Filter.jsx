@@ -1,6 +1,6 @@
 import React from 'react'
 
-function Filter(handleFilterText) {
+function Filter({handleFilterText}) {
   return (
     <div>
       <div className="container" style={{ width: "500px", margin: "20px auto" }}>
@@ -8,7 +8,7 @@ function Filter(handleFilterText) {
         className="form-select"
         aria-label="Default select example"
         style={{ height: "50px" }}
-        // onChange={(e) => handleFilterText(e.target.value)}
+        onChange={(e) => handleFilterText(e.target.value)}
       >
         <option value="">All Notes</option>
         <option value="BUSINESS">Business</option>
