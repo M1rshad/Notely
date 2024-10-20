@@ -3,6 +3,7 @@ import { FaNoteSticky } from 'react-icons/fa6'
 import { MdMarkunread } from 'react-icons/md'
 import { Link } from 'react-router-dom'
 import { FormatDate } from './FormatDate'
+import './NoteCard.css'
 
 
 function NoteCard({note}) {
@@ -11,7 +12,7 @@ function NoteCard({note}) {
 
   return(
     <div>
-      <div className="col-md-4 single-note-item all-category">
+      <div className="all-category">
       <div className="card card-body">
         <span className="side-stick" style={{ backgroundColor: color }}></span>
         <FaNoteSticky style={{ marginLeft: "auto", color: color }} />

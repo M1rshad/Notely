@@ -1,0 +1,25 @@
+.container {
+    margin-top: 20px; /* Space from top */
+}
+
+.note-has-grid {
+    display: flex; /* Flexbox for row layout */
+    flex-wrap: wrap; /* Allow wrapping */
+    justify-content: space-between; /* Space items evenly */
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .single-note-item {
+        flex: 1 1 calc(50% - 20px); /* Two cards per row on medium screens */
+        max-width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 576px) {
+    .single-note-item {
+        flex: 1 1 100%; /* One card per row on small screens */
+        max-width: 100%;
+    }
+}

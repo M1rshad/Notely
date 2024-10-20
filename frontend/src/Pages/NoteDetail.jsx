@@ -3,6 +3,7 @@ import { BiSolidTrashAlt } from 'react-icons/bi'
 import { FiEdit } from 'react-icons/fi'
 import { Link, useParams } from 'react-router-dom'
 import { FormatDate } from '../Components/FormatDate'
+import './NoteDetail.css'
 import axios from 'axios'
 import Modal from '../Components/Modal'
 
