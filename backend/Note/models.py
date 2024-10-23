@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.crypto import get_random_string
+from django.contrib.auth.models import User
 from slugify import slugify
 
 # Create your models here.
@@ -17,6 +18,7 @@ class Note(models.Model):
     category = models.CharField(max_length=15, choices=CATEGORY, default='PERSONAL')
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user')
 
     
     def __str__(self):

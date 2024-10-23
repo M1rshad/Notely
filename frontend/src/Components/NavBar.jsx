@@ -9,7 +9,7 @@ function NavBar({searchText, handleSearchText} ) {
       <nav className="navbar bg-body-tertiary py-50" style={{ padding: "20px" }}>
       <div className="container d-flex justify-content-around">
         <a className="navbar-brand" href="/">
-          <h4 style={{ fontWeight: "bold" }}>Notey</h4>
+          <h4 style={{ fontWeight: "bold" }}>Notely</h4>
         </a>
         <div className="d-flex">
           <div
