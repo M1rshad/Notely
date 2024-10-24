@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, useLocation } from 'react-router-dom';
 import NavBar from './Components/NavBar';
 import Homepage from './Pages/Homepage';
 import AddNotes from './Pages/AddNotes';
@@ -6,9 +6,11 @@ import NoteDetail from './Pages/NoteDetail';
 import EditNotes from './Pages/EditNotes';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Login from './Pages/LoginPage/Login';
+import Signup from './Pages/SignupPage/Signup';
 
 function App() {
-
+  const location = useLocation()
   const [notes, setNotes] = useState([])
   const [filterText, setFilterText] = useState('')
   const [searchText, setSearchText] = useState('')
@@ -62,12 +64,16 @@ function App() {
 
   return (
     <div className="App">
-      <NavBar searchText={searchText} handleSearchText={handleSearchText}/>
+      {!(location.pathname === '/signup' || location.pathname === '/login') && (
+        <NavBar searchText={searchText} handleSearchText={handleSearchText} />
+      )}
       <Routes>
         <Route path='/' element={<Homepage notes ={filteredNotes} handleFilterText={handleFilterText}/>}/>  
         <Route path='/add-note' element={<AddNotes addNote={addNote}/>}/>  
         <Route path='/edit-note/:slug' element={<EditNotes updateNote={updateNote}/>}/>  
         <Route path='/notes/:slug' element={<NoteDetail/>}/>  
+        <Route path='/login' element={<Login/>}/>  
+        <Route path='/signup' element={<Signup/>}/>  
       </Routes>
     </div>
   );
