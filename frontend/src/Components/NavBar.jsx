@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaSquarePlus } from 'react-icons/fa6'
 import { Link } from 'react-router-dom';
 
-function NavBar({searchText, handleSearchText} ) {
+function NavBar({searchText, handleSearchText, handleLogOut} ) {
   return (
     <div>
       <nav className="navbar bg-body-tertiary py-50" style={{ padding: "20px" }}>
@@ -37,6 +37,7 @@ function NavBar({searchText, handleSearchText} ) {
             <FaSquarePlus className="me-2 fs-6" /> Add Notes
           </button>
         </Link>
+        <button onClick={handleLogOut}>Logout</button>
       </div>
     </nav>
     </div>

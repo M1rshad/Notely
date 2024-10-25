@@ -18,7 +18,7 @@ const Login = () => {
       setError('Please fill in both fields.')
       return;
     }
-    axios.post(baseURL + 'api/token/', loginCredentials)
+    axios.post(baseURL + 'api/token/', loginCredentials, { withCredentials: true })
       .then(res => {
         console.log(res.data);
         navigate('/');

@@ -1,4 +1,4 @@
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import NavBar from './Components/NavBar';
 import Homepage from './Pages/Homepage';
 import AddNotes from './Pages/AddNotes';
@@ -9,8 +9,10 @@ import axios from 'axios';
 import Login from './Pages/LoginPage/Login';
 import Signup from './Pages/SignupPage/Signup';
 
+
 function App() {
   const location = useLocation()
+  const navigate = useNavigate()
   const [notes, setNotes] = useState([])
   const [filterText, setFilterText] = useState('')
   const [searchText, setSearchText] = useState('')
@@ -38,7 +40,7 @@ function App() {
   },[searchText])
 
   useEffect(() =>{
-    axios.get(baseURL+'notes').then((response)=>
+    axios.get(baseURL+'notes', { withCredentials: true }).then((response)=>
       {console.log(response.data)
       setNotes(response.data)
 
@@ -48,6 +50,17 @@ function App() {
       (err)=>console.log(err.message)
     )
   }, [])
+
+  const handleLogOut = ()=>{
+    axios.post(baseURL+'api/logout/',{}, { withCredentials: true }).then(
+      res=>{
+        console.log(res.data)
+        navigate('/login')
+      }
+    ).catch(
+      err=> console.log(err.message)
+    )
+  }
 
   const addNote= (data)=>{
     axios.post(baseURL+'notes', data).then(res => {
@@ -65,7 +78,7 @@ function App() {
   return (
     <div className="App">
       {!(location.pathname === '/signup' || location.pathname === '/login') && (
-        <NavBar searchText={searchText} handleSearchText={handleSearchText} />
+        <NavBar searchText={searchText} handleSearchText={handleSearchText} handleLogOut={handleLogOut}/>
       )}
       <Routes>
         <Route path='/' element={<Homepage notes ={filteredNotes} handleFilterText={handleFilterText}/>}/>  
