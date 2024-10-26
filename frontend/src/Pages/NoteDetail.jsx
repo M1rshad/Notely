@@ -6,6 +6,7 @@ import { FormatDate } from '../Components/FormatDate'
 import './NoteDetail.css'
 import axios from 'axios'
 import Modal from '../Components/Modal'
+import { noteDetail } from '../Api/Api'
 
 function NoteDetail() {
   
@@ -24,13 +25,16 @@ function NoteDetail() {
   }
 
   useEffect(()=>{
-    axios.get(`${baseURL}/notes/${slug}`).then(
-      res=>{
-        setNote(res.data)
-      }
-    ).catch(
-      err=>console.log(err.message)
-    )
+    if (slug) { // Ensure slug is defined before fetching
+      noteDetail(slug, setNote);
+  }
+    // axios.get(`${baseURL}/notes/${slug}`).then(
+    //   res=>{
+    //     setNote(res.data)
+    //   }
+    // ).catch(
+    //   err=>console.log(err.message)
+    // )
   },[slug])
 
 

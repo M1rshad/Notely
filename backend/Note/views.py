@@ -63,7 +63,7 @@ class CustomTokenRefreshView(TokenRefreshView):
             access_token = tokens.get('access')
             
             res = Response()
-            res.data = {'refresh': True}
+            res.data = {'refreshed': True}
 
             if access_token:
                 res.set_cookie(
@@ -79,7 +79,7 @@ class CustomTokenRefreshView(TokenRefreshView):
             return res
 
         except Exception as e:
-            return Response({'refresh': False, 'error': str(e)}, status=400)
+            return Response({'refreshed': False, 'error': str(e)}, status=400)
         
 
 class LogoutView(APIView):
@@ -118,12 +118,12 @@ class NoteView(APIView):
         return Response(serializer.data, status = status.HTTP_200_OK)
 
     def post(self, request):
-        _data = request.data 
+        _data = request.data.copy()
         serializer = NoteSerializer(data=_data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-        serializer.save()
+        serializer.save(user=request.user)
         return Response(serializer.data, status = status.HTTP_201_CREATED)
 
 

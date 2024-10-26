@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Login from './Pages/LoginPage/Login';
 import Signup from './Pages/SignupPage/Signup';
+import { addNewNote, fetchNotes, logOut,  } from './Api/Api';
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
   const [notes, setNotes] = useState([])
   const [filterText, setFilterText] = useState('')
   const [searchText, setSearchText] = useState('')
+  const [isLoading, setIsLoading] = useState(true); // loading state
  
   const handleFilterText = (val) =>{
     setFilterText(val)
@@ -40,34 +42,23 @@ function App() {
   },[searchText])
 
   useEffect(() =>{
-    axios.get(baseURL+'notes', { withCredentials: true }).then((response)=>
-      {console.log(response.data)
-      setNotes(response.data)
-
+    const loadNotes = async()=>{
+      setIsLoading(true);
+      await fetchNotes(setNotes);
+      setIsLoading(false);
     }
-    
-    ).catch(
-      (err)=>console.log(err.message)
-    )
+    loadNotes();
   }, [])
 
   const handleLogOut = ()=>{
-    axios.post(baseURL+'api/logout/',{}, { withCredentials: true }).then(
-      res=>{
-        console.log(res.data)
-        navigate('/login')
-      }
-    ).catch(
-      err=> console.log(err.message)
-    )
+    logOut(navigate)
   }
 
   const addNote= (data)=>{
-    axios.post(baseURL+'notes', data).then(res => {
-      console.log(res.data)
-      setNotes([...notes, data])
-    })
+    addNewNote(data, notes, setNotes)
     }
+
+    
     const updateNote= (data, slug)=>{
       axios.put(`${baseURL}/notes/${slug}`, data).then(res => {
         console.log(res.data)
@@ -75,8 +66,11 @@ function App() {
   
   }
 
+  if (isLoading) {
+    return <p>Loading...</p> 
+    }
   return (
-    <div className="App">
+    <div className="App"> 
       {!(location.pathname === '/signup' || location.pathname === '/login') && (
         <NavBar searchText={searchText} handleSearchText={handleSearchText} handleLogOut={handleLogOut}/>
       )}

@@ -24,7 +24,6 @@ function AddNotes({addNote}) {
         return;
       }
       addNote(newNote)
-      
       navigate("/")
     }
   return (

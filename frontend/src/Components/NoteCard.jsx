@@ -9,7 +9,7 @@ import './NoteCard.css'
 function NoteCard({note}) {
   const body = `${note.body.split(" ").slice(0, 20).join(" ")}...`
   const color = note.category === "BUSINESS" ? 'blue' : note.category === "PERSONAL" ? 'green' : 'purple'
-
+  
   return(
     <div>
       <div className="all-category">
@@ -38,11 +38,9 @@ function NoteCard({note}) {
        
 
           <span className="d-flex justify-contents-around">
-            <a href="/notes-detail">
-              <MdMarkunread
-                style={{ fontSize: "25px", cursor: "pointer", color: color }}
-              />
-            </a>
+          <Link to={`/notes/${note.slug}`} aria-label="View note details">
+              <MdMarkunread style={{ fontSize: "25px", cursor: "pointer", color: color }} />
+            </Link>
 
             <small className="text-muted">{note.category}</small>
           </span>

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import NoteCard from './NoteCard';
 import './NoteContainer.css';
 
 function NoteCardContainer({ notes }) {
+  useEffect(()=>{
+    console.log(notes)
+  },[notes])
   return (
     <div className="container">
       <div className="row">

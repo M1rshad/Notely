@@ -6,7 +6,8 @@ class NoteSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Note
-        fields = '__all__'
+        fields = ['title', 'body', 'category', 'slug', 'created', 'updated']
+        read_only_fields = ['user']
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
