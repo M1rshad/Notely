@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Login.css'
 import googleIcon from './google.svg'; 
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { login } from '../../Api/Api';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,22 +11,13 @@ const Login = () => {
   const [error, setError] = useState('');  
 
   const loginCredentials = { username, password };
-  const baseURL = 'http://127.0.0.1:8000/';
 
   const handleLogin = () => {
     if (!username || !password){
       setError('Please fill in both fields.')
       return;
     }
-    axios.post(baseURL + 'api/token/', loginCredentials, { withCredentials: true })
-      .then(res => {
-        console.log(res.data);
-        navigate('/');
-      })
-      .catch(err => {
-        console.error(err.message);
-        setError('Invalid credentials.'); 
-      });
+    login(loginCredentials, navigate, setError)
   }
 
   return (

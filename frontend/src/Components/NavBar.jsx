@@ -37,7 +37,7 @@ function NavBar({searchText, handleSearchText, handleLogOut} ) {
             <FaSquarePlus className="me-2 fs-6" /> Add Notes
           </button>
         </Link>
-        <button onClick={handleLogOut}>Logout</button>
+        <button onClick={handleLogOut} className='btn btn-primary'>Logout</button>
       </div>
     </nav>
     </div>

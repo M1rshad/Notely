@@ -1,12 +1,35 @@
 import axios from "axios"
 
 const BASE_URL = 'http://127.0.0.1:8000/api/'
+const SIGN_UP_URL = `${BASE_URL}register/`
+const LOG_IN_URL = `${BASE_URL}token/`
 const REFRESH_URL = `${BASE_URL}token/refresh/`
 const LOG_OUT_URL = `${BASE_URL}logout/`
 const NOTES_URL = `${BASE_URL}notes/`
+const AUTH_URL = `${BASE_URL}authenticated/`
 
 
+export const signUp = async(signUpCredentials, navigate, setError) =>{
+    try{
+        await axios.post(SIGN_UP_URL, signUpCredentials)
+        navigate('/login')
+    }catch(err){
+        console.log(err)
+        setError('Signup failed. Please try again.'); 
+    }
 
+}
+
+export const login = async(loginCredentials, navigate, setError) =>{
+    try{
+        await axios.post(LOG_IN_URL, loginCredentials, {withCredentials:true})
+        navigate('/')
+    }catch(err){
+        console.log(err)
+        setError('Invalid Credentials'); 
+    }
+
+}
 
 export const refresh_token = async () => {
     try {
@@ -49,6 +72,16 @@ export const logOut = async(navigate) =>{
         call_refresh(err, () => axios.get(NOTES_URL,{}, { withCredentials: true }), navigate);
     }
 }
+
+export const is_authenticated = async () =>{
+    try{
+        await axios.post(AUTH_URL, {}, {withCredentials:true})
+        return true
+    }catch{
+        return false
+    }
+}
+
 
 export const addNoteAPI = async(data, notes, setNotes) =>{
     try{

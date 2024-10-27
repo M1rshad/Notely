@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import NoteView, NoteDetailView, SearchView, CustomTokenObtainPairView, CustomTokenRefreshView, LogoutView, RegisterView
+from .views import NoteView, NoteDetailView, SearchView, CustomTokenObtainPairView, CustomTokenRefreshView, LogoutView, RegisterView, IsAuthenticatedView
 
 urlpatterns = [
     path('notes/', NoteView.as_view(), name='notes'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('token/refresh/', CustomTokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('register/', RegisterView.as_view(), name='register'),
+    path('authenticated/', IsAuthenticatedView.as_view(), name='authenticated'),
 ]

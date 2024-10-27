@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Signup.css';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { signUp } from '../../Api/Api';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -17,7 +17,6 @@ const Signup = () => {
     password: password1, 
   };
 
-  const baseURL = 'http://127.0.0.1:8000/';
 
   const handleSignUp = () => {
     if (!username || !email || !password1 || !password2) {
@@ -32,15 +31,7 @@ const Signup = () => {
 
     setError('');
 
-    axios.post(baseURL + 'api/register/', signUpCredentials)
-      .then(res => {
-        console.log(res.data);
-        navigate('/login'); 
-      })
-      .catch(err => {
-        console.error(err.message);
-        setError('Signup failed. Please try again.'); 
-      });
+    signUp(signUpCredentials, navigate, setError)
   };
 
   return (

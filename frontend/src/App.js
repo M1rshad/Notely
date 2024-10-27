@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import Login from './Pages/LoginPage/Login';
 import Signup from './Pages/SignupPage/Signup';
 import { addNoteAPI, fetchNote, fetchNotes, logOut, searchAPI, updateNoteAPI,  } from './Api/Api';
+import PrivateRoute from './Components/PrivateRoute';
 
 
 function App() {
@@ -70,7 +71,7 @@ function App() {
         <NavBar searchText={searchText} handleSearchText={handleSearchText} handleLogOut={handleLogOut}/>
       )}
       <Routes>
-        <Route path='/' element={<Homepage notes ={filteredNotes} handleFilterText={handleFilterText}/>}/>  
+        <Route path='/' element={<PrivateRoute><Homepage notes ={filteredNotes} handleFilterText={handleFilterText}/></PrivateRoute>}/>  
         <Route path='/add-note' element={<AddNotes addNote={addNote}/>}/>  
         <Route path='/edit-note/:slug' element={<EditNotes updateNote={updateNote}/>}/>  
         <Route path='/notes/:slug' element={<NoteDetail/>}/>  

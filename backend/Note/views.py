@@ -110,6 +110,15 @@ class RegisterView(APIView):
         return Response(serializer.data, status = status.HTTP_201_CREATED)
     
 
+class IsAuthenticatedView(APIView):
+    
+    permission_classes=[IsAuthenticated]
+
+    def post(self, request):
+        return Response({'authenticated':True})
+    
+    
+
 class NoteView(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request):
