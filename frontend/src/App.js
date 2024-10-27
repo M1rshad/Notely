@@ -5,10 +5,9 @@ import AddNotes from './Pages/AddNotes';
 import NoteDetail from './Pages/NoteDetail';
 import EditNotes from './Pages/EditNotes';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import Login from './Pages/LoginPage/Login';
 import Signup from './Pages/SignupPage/Signup';
-import { addNewNote, fetchNotes, logOut,  } from './Api/Api';
+import { addNoteAPI, fetchNote, fetchNotes, logOut, searchAPI, updateNoteAPI,  } from './Api/Api';
 
 
 function App() {
@@ -17,8 +16,8 @@ function App() {
   const [notes, setNotes] = useState([])
   const [filterText, setFilterText] = useState('')
   const [searchText, setSearchText] = useState('')
-  const [isLoading, setIsLoading] = useState(true); // loading state
- 
+  const [isLoading, setIsLoading] = useState(true); 
+
   const handleFilterText = (val) =>{
     setFilterText(val)
   }
@@ -32,13 +31,11 @@ function App() {
   filterText === 'IMPORTANT' ? notes.filter(notes => notes.category === 'IMPORTANT') : notes
 
 
-  const baseURL = 'http://127.0.0.1:8000/'
 
   useEffect(()=>{
     if (searchText.length < 3) return;
-    axios.get(baseURL+`search-notes/?search=${searchText}`).then(
-      res=>setNotes(res.data)
-    )
+    searchAPI(searchText, setNotes)
+
   },[searchText])
 
   useEffect(() =>{
@@ -55,20 +52,18 @@ function App() {
   }
 
   const addNote= (data)=>{
-    addNewNote(data, notes, setNotes)
+    addNoteAPI(data, notes, setNotes)
     }
 
-    
-    const updateNote= (data, slug)=>{
-      axios.put(`${baseURL}/notes/${slug}`, data).then(res => {
-        console.log(res.data)
-       })
-  
-  }
+    const updateNote = async(data, slug, setTitle, setBody, setCategory) =>{
+      await updateNoteAPI(slug, data)
+      fetchNote(slug, setTitle, setBody, setCategory)
+    }
 
   if (isLoading) {
     return <p>Loading...</p> 
-    }
+  }
+
   return (
     <div className="App"> 
       {!(location.pathname === '/signup' || location.pathname === '/login') && (

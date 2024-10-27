@@ -135,14 +135,14 @@ class NoteDetailView(APIView):
     
 
     def put(self, request, slug):
-        note = get_object_or_404(Note, slug=slug)
+        note = get_object_or_404(Note, slug=slug, user=request.user)
         _data = request.data
         serializer = NoteSerializer(note,data=_data)
         
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        serializer.save()
+        serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
@@ -155,6 +155,6 @@ class NoteDetailView(APIView):
 class SearchView(APIView):
     def get(self, request):
         query =  request.query_params.get("search")
-        notes = Note.objects.filter(Q(title__icontains=query)|Q(body__icontains=query)|Q(category__icontains=query))
+        notes = Note.objects.filter(Q(title__icontains=query)|Q(body__icontains=query)|Q(category__icontains=query),user=request.user)
         serializer = NoteSerializer(notes, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

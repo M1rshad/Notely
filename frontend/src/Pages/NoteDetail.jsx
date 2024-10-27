@@ -4,37 +4,28 @@ import { FiEdit } from 'react-icons/fi'
 import { Link, useParams } from 'react-router-dom'
 import { FormatDate } from '../Components/FormatDate'
 import './NoteDetail.css'
-import axios from 'axios'
 import Modal from '../Components/Modal'
-import { noteDetail } from '../Api/Api'
+import { deleteNote, noteDetail } from '../Api/Api'
 
 function NoteDetail() {
   
   const [note, setNote] = useState({})
   const {slug} = useParams()
-  const baseURL = 'http://127.0.0.1:8000/'
 
   
   const [isOpen, setIsOpen] = useState(false)
   const handleIsOpen = () =>{
     setIsOpen(!isOpen)
   }
-  const deleteNote = (slug) => {
-    axios.delete(`${baseURL}notes/${slug}`).then(res => {
-    })
+  const handleDeleteNote = (slug) => {
+    deleteNote(slug)
   }
 
   useEffect(()=>{
-    if (slug) { // Ensure slug is defined before fetching
+    if (slug) {
       noteDetail(slug, setNote);
   }
-    // axios.get(`${baseURL}/notes/${slug}`).then(
-    //   res=>{
-    //     setNote(res.data)
-    //   }
-    // ).catch(
-    //   err=>console.log(err.message)
-    // )
+
   },[slug])
 
 
@@ -69,7 +60,7 @@ function NoteDetail() {
       {isOpen && (
         <Modal
           handleIsOpen={handleIsOpen}
-          deleteNote={() => deleteNote(slug)}
+          deleteNote={() => handleDeleteNote(slug)}
         />
       )} 
     </> 
