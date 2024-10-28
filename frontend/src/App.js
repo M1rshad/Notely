@@ -9,11 +9,13 @@ import Login from './Pages/LoginPage/Login';
 import Signup from './Pages/SignupPage/Signup';
 import { addNoteAPI, fetchNote, fetchNotes, logOut, searchAPI, updateNoteAPI,  } from './Api/Api';
 import PrivateRoute from './Components/PrivateRoute';
+import { useAuth } from './Context/UseAuth';
 
 
 function App() {
   const location = useLocation()
   const navigate = useNavigate()
+  const {isAuthenticated, loading} = useAuth()
   const [notes, setNotes] = useState([])
   const [filterText, setFilterText] = useState('')
   const [searchText, setSearchText] = useState('')
@@ -27,29 +29,50 @@ function App() {
     setSearchText(val)
   }
 
-  const filteredNotes = filterText === 'BUSINESS' ? notes.filter(notes => notes.category === 'BUSINESS') :
-  filterText === 'PERSONAL' ? notes.filter(notes => notes.category === 'PERSONAL') : 
-  filterText === 'IMPORTANT' ? notes.filter(notes => notes.category === 'IMPORTANT') : notes
+  const filteredNotes =
+  filterText === 'BUSINESS'
+    ? notes.filter((note) => note.category === 'BUSINESS')
+    : filterText === 'PERSONAL'
+    ? notes.filter((note) => note.category === 'PERSONAL')
+    : filterText === 'IMPORTANT'
+    ? notes.filter((note) => note.category === 'IMPORTANT')
+    : notes;
 
 
 
   useEffect(()=>{
     if (searchText.length < 3) return;
     searchAPI(searchText, setNotes)
-
   },[searchText])
 
-  useEffect(() =>{
-    const loadNotes = async()=>{
-      setIsLoading(true);
-      await fetchNotes(setNotes);
-      setIsLoading(false);
-    }
+  useEffect(() => {
+    const loadNotes = async () => {
+      if (isAuthenticated) {
+        setIsLoading(true);
+        await fetchNotes(setNotes);
+        setIsLoading(false);
+      } else {
+        setNotes([]);
+        setIsLoading(false);
+      }
+    };
     loadNotes();
-  }, [])
+  }, [isAuthenticated]);
+//   useEffect(() => {
+//     const loadNotes = async () => {
+//         if (isAuthenticated) {
+//             setIsLoading(true);
+//             await fetchNotes(setNotes);
+//             setIsLoading(false);
+//         }
+//     };
+//     loadNotes();
+// }, [isAuthenticated]);
+
 
   const handleLogOut = ()=>{
     logOut(navigate)
+    setNotes([])
   }
 
   const addNote= (data)=>{
@@ -61,20 +84,20 @@ function App() {
       fetchNote(slug, setTitle, setBody, setCategory)
     }
 
-  if (isLoading) {
+  if (isLoading || loading) {
     return <p>Loading...</p> 
   }
 
   return (
     <div className="App"> 
       {!(location.pathname === '/signup' || location.pathname === '/login') && (
-        <NavBar searchText={searchText} handleSearchText={handleSearchText} handleLogOut={handleLogOut}/>
+        <PrivateRoute><NavBar searchText={searchText} handleSearchText={handleSearchText} handleLogOut={handleLogOut}/></PrivateRoute>
       )}
       <Routes>
         <Route path='/' element={<PrivateRoute><Homepage notes ={filteredNotes} handleFilterText={handleFilterText}/></PrivateRoute>}/>  
-        <Route path='/add-note' element={<AddNotes addNote={addNote}/>}/>  
-        <Route path='/edit-note/:slug' element={<EditNotes updateNote={updateNote}/>}/>  
-        <Route path='/notes/:slug' element={<NoteDetail/>}/>  
+        <Route path='/add-note' element={<PrivateRoute><AddNotes addNote={addNote}/></PrivateRoute>}/>  
+        <Route path='/edit-note/:slug' element={<PrivateRoute><EditNotes updateNote={updateNote}/></PrivateRoute>}/>  
+        <Route path='/notes/:slug' element={<PrivateRoute><NoteDetail/></PrivateRoute>}/>  
         <Route path='/login' element={<Login/>}/>  
         <Route path='/signup' element={<Signup/>}/>  
       </Routes>

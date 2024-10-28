@@ -2,23 +2,36 @@ import React, { useState } from 'react';
 import './Login.css'
 import googleIcon from './google.svg'; 
 import { Link, useNavigate } from 'react-router-dom';
-import { login } from '../../Api/Api';
+import { useAuth } from '../../Context/UseAuth';
+
+
 
 const Login = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');  
+  const {loginUser} = useAuth()
 
   const loginCredentials = { username, password };
 
-  const handleLogin = () => {
-    if (!username || !password){
-      setError('Please fill in both fields.')
-      return;
+
+  const handleLogin = async () => {
+    if (!username || !password) {
+        setError('Please fill in both fields.');
+        return;
     }
-    login(loginCredentials, navigate, setError)
-  }
+    loginUser(loginCredentials, navigate, () => {
+      // Actions to take on successful login, like fetching notes
+      console.log("Login successful!"); // You can also call fetchNotes or similar here
+  }).catch(() => {
+      setError('Invalid credentials.');
+  });
+    // const success = await login_user(loginCredentials, navigate);
+    // if (!success) {
+    //     setError('Invalid credentials.');
+    //   }
+  };
 
   return (
     <div className='sign-up-body'>

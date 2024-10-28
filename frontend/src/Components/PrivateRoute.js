@@ -1,22 +1,22 @@
-import { useNavigate } from "react-router-dom"
-import { useAuth } from "../Context/UseAuth"
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../Context/UseAuth";
 
+const PrivateRoute = ({ children }) => {
+    const { isAuthenticated, loading } = useAuth();
+    const navigate = useNavigate();
 
-const PrivateRoute = ({children}) =>{
+    useEffect(() => {
+        if (!loading && !isAuthenticated) {
+            navigate('/login');
+        }
+    }, [isAuthenticated, loading, navigate]);
 
-    const {isAuthenticated, loading} = useAuth()
-    const navigate = useNavigate()
-
-    if (loading){
-        return <p>Loading..</p>
+    if (loading) {
+        return <p>Loading...</p>;
     }
 
-    if (isAuthenticated){
-        return children
-    }else{
-        navigate('/login')
-    }
-
-}
+    return isAuthenticated ? children : null; // Return null if not authenticated
+};
 
 export default PrivateRoute;

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { is_authenticated } from "../Api/Api";
+import { is_authenticated, login } from "../Api/Api";
 
 const AuthContext = createContext();
 
@@ -18,13 +18,27 @@ export const AuthProvider = ({children}) =>{
             setLoading(false)
         }
     }
+
+    const loginUser = async (loginCredentials, navigate, onLoginSuccess) => {
+        try {
+            await login(loginCredentials);
+            setIsAuthenticated(true);
+            if (onLoginSuccess) onLoginSuccess();
+            navigate('/'); 
+            return true; 
+        } catch (err) {
+            console.error(err);
+            return false; 
+        }
+    };
+
     useEffect(()=>{
         get_authenticated()
-    },[window.location.pathname])
-
+    },[])
+    console.log(isAuthenticated)
     return (
 
-    <AuthContext.Provider value={{isAuthenticated, loading}}>
+    <AuthContext.Provider value={{isAuthenticated, loading, loginUser}}>
         {children}
     </AuthContext.Provider>
     )

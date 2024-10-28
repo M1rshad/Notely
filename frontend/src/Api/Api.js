@@ -20,16 +20,15 @@ export const signUp = async(signUpCredentials, navigate, setError) =>{
 
 }
 
-export const login = async(loginCredentials, navigate, setError) =>{
-    try{
-        await axios.post(LOG_IN_URL, loginCredentials, {withCredentials:true})
-        navigate('/')
-    }catch(err){
-        console.log(err)
-        setError('Invalid Credentials'); 
+export const login = async (loginCredentials) => {
+    try {
+        await axios.post(LOG_IN_URL, loginCredentials, { withCredentials: true });
+        return true; 
+    } catch (err) {
+        console.error(err);
+        throw new Error('Invalid credentials'); 
     }
-
-}
+};
 
 export const refresh_token = async () => {
     try {
@@ -52,16 +51,35 @@ export const call_refresh = (error, func) =>{
     }
 }
 
+// export const fetchNotes = async (setNotes) => {
+//     try {
+//         const response = await axios.get(NOTES_URL, { withCredentials: true });
+//         console.log(response.data);
+//         setNotes(response.data);
+//     } catch (err) {
+//         console.log(err.message);
+//         call_refresh(err, () => axios.get(NOTES_URL, { withCredentials: true }));
+//     }
+// };
 export const fetchNotes = async (setNotes) => {
     try {
         const response = await axios.get(NOTES_URL, { withCredentials: true });
         console.log(response.data);
         setNotes(response.data);
     } catch (err) {
-        console.log(err.message);
-        call_refresh(err, () => axios.get(NOTES_URL, { withCredentials: true }));
+        console.error("Fetch notes error:", err.message);
+        call_refresh(err, async () => {
+            try {
+                const retryResponse = await axios.get(NOTES_URL, { withCredentials: true });
+                setNotes(retryResponse.data);
+            } catch (retryErr) {
+                console.error("Retry failed:", retryErr.message);
+                setNotes([]); // Clear notes on repeated failure
+            }
+        });
     }
 };
+
 
 export const logOut = async(navigate) =>{
     try{
