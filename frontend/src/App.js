@@ -10,12 +10,13 @@ import Signup from './Pages/SignupPage/Signup';
 import { addNoteAPI, fetchNote, fetchNotes, logOut, searchAPI, updateNoteAPI,  } from './Api/Api';
 import PrivateRoute from './Components/PrivateRoute';
 import { useAuth } from './Context/UseAuth';
+import Loader from './Components/Loader';
 
 
 function App() {
   const location = useLocation()
   const navigate = useNavigate()
-  const {isAuthenticated, loading} = useAuth()
+  const {isAuthenticated} = useAuth()
   const [notes, setNotes] = useState([])
   const [filterText, setFilterText] = useState('')
   const [searchText, setSearchText] = useState('')
@@ -45,19 +46,28 @@ function App() {
     searchAPI(searchText, setNotes)
   },[searchText])
 
-  useEffect(() => {
-    const loadNotes = async () => {
+    // Fetch notes on login completion
+    useEffect(() => {
+      const loadNotes = async () => {
+        if (isAuthenticated) {
+          setIsLoading(true);
+          console.log("Authenticated, fetching notes...");
+          await fetchNotes(setNotes); // fetch and set notes
+          setIsLoading(false);
+        } else {
+          setNotes([]);
+          setIsLoading(false);
+        }
+      };
+      loadNotes();
+    }, [isAuthenticated]);
+  
+    // Optional: Re-run fetching based on route or location changes for added consistency
+    useEffect(() => {
       if (isAuthenticated) {
-        setIsLoading(true);
-        await fetchNotes(setNotes);
-        setIsLoading(false);
-      } else {
-        setNotes([]);
-        setIsLoading(false);
+        fetchNotes(setNotes);
       }
-    };
-    loadNotes();
-  }, [isAuthenticated]);
+    }, [location.pathname, isAuthenticated]);
 //   useEffect(() => {
 //     const loadNotes = async () => {
 //         if (isAuthenticated) {
@@ -84,9 +94,16 @@ function App() {
       fetchNote(slug, setTitle, setBody, setCategory)
     }
 
-  if (isLoading || loading) {
-    return <p>Loading...</p> 
+    if (isLoading) {
+      return (
+          <div className="d-flex justify-content-center align-items-center" style={{ height: '100vh' }}>
+              <Loader />
+          </div>
+      );
   }
+  
+  
+  
 
   return (
     <div className="App"> 

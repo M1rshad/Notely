@@ -40,16 +40,32 @@ export const refresh_token = async () => {
     }
 }
 
-export const call_refresh = (error, func) =>{
-    if (error.response && error.response.status === 401){
-        const tokenRefreshed = refresh_token()
+// export const call_refresh = (error, func) =>{
+//     if (error.response && error.response.status === 401){
+//         const tokenRefreshed = refresh_token()
+
+//         if (tokenRefreshed) {
+//             const retryResponse = func()
+//             return retryResponse.data
+//         }
+//     }
+// }
+export const call_refresh = async (error, func) => {
+    if (error.response && error.response.status === 401) {
+        const tokenRefreshed = await refresh_token(); // Wait for the refresh token to complete
 
         if (tokenRefreshed) {
-            const retryResponse = func()
-            return retryResponse.data
+            try {
+                const retryResponse = await func(); // Retry the original request
+                return retryResponse.data; // Return the retried response data
+            } catch (retryErr) {
+                console.error("Retry failed:", retryErr.message);
+                return null; // Handle retry failure gracefully
+            }
         }
     }
-}
+    return null; // Return null if not a 401 error or refresh fails
+};
 
 // export const fetchNotes = async (setNotes) => {
 //     try {
